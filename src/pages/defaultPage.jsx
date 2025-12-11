@@ -92,20 +92,14 @@ export default function LoginSignup() {
         dispatch(setCurrentUser(userWithoutPassword));
         localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
         
-        // Очищаем форму после успешного входа
-        dispatch(clearAuthForm());
-        
         alert('Login successful!');
         navigate('/Second_Page');
       } else {
         alert('Invalid username or password!');
-        // Очищаем только пароль при ошибке
-        dispatch(handleChangeAuthPassword(''));
       }
     } catch (error) {
       console.error('Login error:', error);
       alert('Login failed. Please try again.');
-      dispatch(handleChangeAuthPassword(''));
     }
   };
   
@@ -114,8 +108,6 @@ export default function LoginSignup() {
     // Проверка на совпадение паролей
     if (authData.password !== authData.confirmPassword) {
       alert("Passwords don't match!");
-      // Очищаем поле подтверждения пароля
-      dispatch(handleChangeAuthConfirmPassword(''));
       return;
     }
     
@@ -160,9 +152,6 @@ export default function LoginSignup() {
       .catch((error) => {
         console.error('Registration error:', error);
         alert('Registration failed. Please try again.');
-        // Очищаем пароль при ошибке
-        dispatch(handleChangeAuthPassword(''));
-        dispatch(handleChangeAuthConfirmPassword(''));
       });
   };
 
@@ -173,90 +162,84 @@ export default function LoginSignup() {
   };
 
   const handleToggleLogin = () => {
-    // При переключении на логин очищаем только email и confirmPassword
-    // username и password оставляем (чтобы пользователь мог сразу ввести пароль)
-    dispatch(handleChangeAuthEmail(''));
-    dispatch(handleChangeAuthConfirmPassword(''));
+    dispatch(clearAuthForm());
     setToggle(false);
   };
 
-  // Также очищаем поля при монтировании компонента
-  useEffect(() => {
-    dispatch(clearAuthForm());
-  }, [dispatch]);
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#1a1a2e] p-4 text-white font-[Poppins]">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#1a1a2e] p-4 text-white font-[Poppins] 2xs:p-2">
       <div
-        className={`relative w-full max-w-[800px] h-[500px] border-2 border-cyan-400 shadow-[0_0_25px_#00d4ff] overflow-hidden transition-all duration-700 ${
+        className={`relative w-full max-w-[800px] h-[500px] border-2 border-cyan-400 shadow-[0_0_25px_#00d4ff] overflow-hidden transition-all duration-700 2xs:h-[400px] 2xs:max-w-[95%] ${
           toggle ? "toggled" : ""
         }`}
       >
         {/* ----------- SHAPES ----------- */}
         <div
-          className={`absolute right-0 -top-1 h-[600px] w-[850px] bg-linear-to-br from-[#1a1a2e] to-cyan-400 rotate-10 skew-y-40 origin-bottom-right transition-all duration-1500 ${
+          className={`absolute right-0 -top-1 h-[600px] w-[850px] bg-linear-to-br from-[#1a1a2e] to-cyan-400 rotate-10 skew-y-40 origin-bottom-right transition-all duration-1500 2xs:h-[500px] 2xs:w-[700px] ${
             toggle && "rotate-0! skew-y-0! delay-500"
           }`}
         />
         <div
-          className={`absolute left-[250px] top-full h-[700px] w-[850px] bg-[#1a1a2e] border-t-4 border-cyan-400 transition-all duration-1500 origin-bottom-left ${
+          className={`absolute left-[250px] top-full h-[700px] w-[850px] bg-[#1a1a2e] border-t-4 border-cyan-400 transition-all duration-1500 origin-bottom-left 2xs:h-[600px] 2xs:w-[700px] 2xs:left-[200px] ${
             toggle && "-rotate-11 -skew-y-41 delay-1200"
           }`}
         />
 
         {/* ----------- LOGIN PANEL ----------- */}
         <div
-          className={`absolute top-0 left-0 w-1/2 h-full flex flex-col justify-center px-10 transition-all duration-700 ${
+          className={`absolute top-0 left-0 w-1/2 h-full flex flex-col justify-center px-10 transition-all duration-700 2xs:px-6 ${
             toggle ? "-translate-x-[120%] opacity-0" : "translate-x-0 opacity-100"
           }`}
         >
-          <h2 className="text-3xl text-center mb-4">Login</h2>
+          <h2 className="text-3xl text-center mb-4 2xs:text-2xl">Login</h2>
 
           {/* USERNAME */}
-          <div className="relative mt-6">
+          <div className="relative mt-6 2xs:mt-4">
             <input
               type="text"
               name="loginUsername"
               required
               value={authData.username}
               onChange={handleLoginChange}
-              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6"
+              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6 2xs:py-1.5"
             />
             <label className="
               absolute left-0 top-1/2 -translate-y-1/2 text-white/60 
               transition-all duration-300
               peer-focus:-top-[1.5px] peer-focus:text-cyan-400 peer-focus:text-sm
               peer-valid:-top-[1.5px] peer-valid:text-cyan-400 peer-valid:text-sm
+              2xs:peer-focus:text-xs 2xs:peer-valid:text-xs
             ">
               Username
             </label>
-            <FaUser className="absolute right-0 top-1/2 -translate-y-1/2" />
+            <FaUser className="absolute right-0 top-1/2 -translate-y-1/2 2xs:text-sm" />
           </div>
 
           {/* PASSWORD */}
-          <div className="relative mt-6">
+          <div className="relative mt-6 2xs:mt-4">
             <input
               type="password"
               name="loginPassword"
               required
               value={authData.password}
               onChange={handleLoginChange}
-              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6"
+              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6 2xs:py-1.5"
             />
             <label className="
               absolute left-0 top-1/2 -translate-y-1/2 text-white/60
               transition-all duration-300
               peer-focus:-top-[1.5px] peer-focus:text-cyan-400 peer-focus:text-sm
               peer-valid:-top-[1.5px] peer-valid:text-cyan-400 peer-valid:text-sm
+              2xs:peer-focus:text-xs 2xs:peer-valid:text-xs
             ">
               Password
             </label>
-            <FaLock className="absolute right-0 top-1/2 -translate-y-1/2" />
+            <FaLock className="absolute right-0 top-1/2 -translate-y-1/2 2xs:text-sm" />
           </div>
 
           <button 
             onClick={handleLogin}
-            className="mt-8 w-full py-2 border-2 border-cyan-400 rounded-full relative overflow-hidden group hover:cursor-pointer"
+            className="mt-8 w-full py-2 border-2 border-cyan-400 rounded-full relative overflow-hidden group hover:cursor-pointer 2xs:mt-6 2xs:py-1.5 2xs:text-sm"
             disabled={isLoading}
           >
             <span className="relative z-10">
@@ -265,9 +248,9 @@ export default function LoginSignup() {
             <div className="absolute inset-0 -top-full group-hover:-bottom-full group-hover:top-0 transition-all duration-500 bg-linear-to-b from-[#1a1a2e] via-cyan-400 to-[#1a1a2e]"/>
           </button>
 
-          <p className="text-center mt-4 text-sm">
+          <p className="text-center mt-4 text-sm 2xs:mt-3 2xs:text-xs">
             Don't have an account? <br />
-            <button onClick={handleToggleSignup} className="text-cyan-400 underline">
+            <button onClick={handleToggleSignup} className="text-cyan-400 underline 2xs:text-sm">
               Sign Up
             </button>
           </p>
@@ -275,108 +258,112 @@ export default function LoginSignup() {
 
         {/* ----------- LOGIN WELCOME ----------- */}
         <div
-          className={`absolute top-0 right-0 w-1/2 h-full flex flex-col justify-center px-20 text-right transition-all duration-700 ${
+          className={`absolute top-0 right-0 w-1/2 h-full flex flex-col justify-center px-20 text-right transition-all duration-700 2xs:px-10 ${
             toggle ? "translate-x-[120%] opacity-0" : "translate-x-0 opacity-100"
           }`}
         >
-          <h2 className="text-4xl">WELCOME BACK!</h2>
+          <h2 className="text-4xl 2xs:text-2xl">WELCOME BACK!</h2>
         </div>
 
         {/* ----------- SIGNUP PANEL ----------- */}
         <div
-          className={`absolute top-0 right-0 w-1/2 h-full flex flex-col justify-center px-16 transition-all duration-700 ${
+          className={`absolute top-0 right-0 w-1/2 h-full flex flex-col justify-center px-16 transition-all duration-700 2xs:px-8 ${
             toggle ? "translate-x-0 opacity-100" : "translate-x-[120%] opacity-0"
           }`}
         >
-          <h2 className="text-3xl text-center mb-4">Register</h2>
+          <h2 className="text-3xl text-center mb-4 2xs:text-2xl">Register</h2>
 
           {/* USERNAME */}
-          <div className="relative mt-6">
+          <div className="relative mt-6 2xs:mt-4">
             <input
               type="text"
               name="username"
               required
               value={authData.username}
               onChange={handleSignupChange}
-              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6"
+              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6 2xs:py-1.5"
             />
             <label className="
               absolute left-0 top-1/2 -translate-y-1/2 text-white/60 
               transition-all duration-300
               peer-focus:-top-[1.5px] peer-focus:text-cyan-400 peer-focus:text-sm
               peer-valid:-top-[1.5px] peer-valid:text-cyan-400 peer-valid:text-sm
+              2xs:peer-focus:text-xs 2xs:peer-valid:text-xs
             ">
               Username
             </label>
-            <FaUser className="absolute right-0 top-1/2 -translate-y-1/2" />
+            <FaUser className="absolute right-0 top-1/2 -translate-y-1/2 2xs:text-sm" />
           </div>
 
           {/* EMAIL */}
-          <div className="relative mt-6">
+          <div className="relative mt-6 2xs:mt-4">
             <input
               type="email"
               name="email"
               required
               value={authData.email}
               onChange={handleSignupChange}
-              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6"
+              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6 2xs:py-1.5"
             />
             <label className="
               absolute left-0 top-1/2 -translate-y-1/2 text-white/60 
               transition-all duration-300
               peer-focus:-top-[1.5px] peer-focus:text-cyan-400 peer-focus:text-sm
               peer-valid:-top-[1.5px] peer-valid:text-cyan-400 peer-valid:text-sm
+              2xs:peer-focus:text-xs 2xs:peer-valid:text-xs
             ">
               Email
             </label>
-            <FaEnvelope className="absolute right-0 top-1/2 -translate-y-1/2" />
+            <FaEnvelope className="absolute right-0 top-1/2 -translate-y-1/2 2xs:text-sm" />
           </div>
 
           {/* PASSWORD */}
-          <div className="relative mt-6">
+          <div className="relative mt-6 2xs:mt-4">
             <input
               type="password"
               name="password"
               required
               value={authData.password}
               onChange={handleSignupChange}
-              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6"
+              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6 2xs:py-1.5"
             />
             <label className="
               absolute left-0 top-1/2 -translate-y-1/2 text-white/60 
               transition-all duration-300
               peer-focus:-top-[1.5px] peer-focus:text-cyan-400 peer-focus:text-sm
               peer-valid:-top-[1.5px] peer-valid:text-cyan-400 peer-valid:text-sm
+              2xs:peer-focus:text-xs 2xs:peer-valid:text-xs
             ">
               Password
             </label>
-            <FaLock className="absolute right-0 top-1/2 -translate-y-1/2" />
+            <FaLock className="absolute right-0 top-1/2 -translate-y-1/2 2xs:text-sm" />
           </div>
 
           {/* CONFIRM PASSWORD */}
-          <div className="relative mt-6">
+          <div className="relative mt-6 2xs:mt-4">
             <input
               type="password"
               name="confirmPassword"
               required
               value={authData.confirmPassword}
               onChange={handleSignupChange}
-              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6"
+              className="peer w-full bg-transparent border-b-2 border-white focus:border-cyan-400 outline-none py-2 pr-6 2xs:py-1.5"
             />
             <label className="
               absolute left-0 top-1/2 -translate-y-1/2 text-white/60 
               transition-all duration-300
               peer-focus:-top-[1.5px] peer-focus:text-cyan-400 peer-focus:text-sm
               peer-valid:-top-[1.5px] peer-valid:text-cyan-400 peer-valid:text-sm
+              2xs:peer-focus:text-xs 2xs:peer-valid:text-xs
             ">
               Confirm password
             </label>
-            <FaLock className="absolute right-0 top-1/2 -translate-y-1/2" />
+            <FaLock className="absolute right-0 top-1/2 -translate-y-1/2 2xs:text-sm" />
           </div>
 
           <button 
             onClick={handleRegister}
-            className="mt-8 w-full py-2 border-2 border-cyan-400 rounded-full relative overflow-hidden group hover:cursor-pointer"
+            className="mt-8 w-full py-2 border-2 border-cyan-400 rounded-full relative overflow-hidden group hover:cursor-pointer 2xs:mt-6 2xs:py-1.5 2xs:text-sm"
             disabled={isLoading}
           >
             <span className="relative z-10">
@@ -385,9 +372,9 @@ export default function LoginSignup() {
             <div className="absolute inset-0 -top-full group-hover:top-0 transition-all duration-500 bg-linear-to-b from-[#1a1a2e] via-cyan-400 to-[#1a1a2e]" />
           </button>
 
-          <p className="text-center mt-4 text-sm">
+          <p className="text-center mt-4 text-sm 2xs:mt-3 2xs:text-xs">
             Already have an account? <br />
-            <button onClick={handleToggleLogin} className="text-cyan-400 underline">
+            <button onClick={handleToggleLogin} className="text-cyan-400 underline 2xs:text-sm">
               Sign In
             </button>
           </p>
@@ -395,11 +382,11 @@ export default function LoginSignup() {
 
         {/* ----------- SIGNUP WELCOME ----------- */}
         <div
-          className={`absolute top-0 left-0 w-1/2 h-full flex flex-col justify-center px-20 transition-all duration-700 ${
+          className={`absolute top-0 left-0 w-1/2 h-full flex flex-col justify-center px-20 transition-all duration-700 2xs:px-10 ${
             toggle ? "translate-x-0 opacity-100" : "-translate-x-[120%] opacity-0"
           }`}
         >
-          <h2 className="text-4xl">WELCOME!</h2>
+          <h2 className="text-4xl 2xs:text-2xl">WELCOME!</h2>
         </div>
       </div>
     </div>
