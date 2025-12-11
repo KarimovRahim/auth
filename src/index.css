@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@theme {
+    --breakpoint-2xs: 524px;  /* маленькие телефоны (xs) */
+    --breakpoint-lg: 768px;   /* планшеты горизонтально */
+    --breakpoint-2xl: 1280px; /* ноутбуки, средние десктопы */
+  }
